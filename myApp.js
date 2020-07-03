@@ -42,7 +42,13 @@ mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopol
 
 // <Your code here >
 
-var Person /* = <Your Model> */
+const personSchema = new mongoose.Schema({
+  name: { type: String, required: true },
+  age: Number,
+  favoriteFoods: [String]
+})
+
+const Person = mongoose.model("Person", personSchema)
 
 // **Note**: Glitch is a real server, and in real servers interactions with
 // the db are placed in handler functions, to be called when some event happens
@@ -80,9 +86,15 @@ var Person /* = <Your Model> */
 // });
 
 var createAndSavePerson = function(done) {
-  
-  done(null /*, data*/);
-
+  var nicCage = new Person({
+    name: "Nic Cage",
+    age: 56,
+    favoriteFoods: ["poultry", "fish"]
+  })
+  nicCage.save(function(err, data) {
+    if(err) return console.error(err)
+    done(null, data)
+  })
 };
 
 /** 4) Create many People with `Model.create()` */
@@ -110,6 +122,9 @@ var createManyPeople = function(arrayOfPeople, done) {
 // object ) as the first argument, and returns an **array** of matches.
 // It supports an extremely wide range of search options. Check it in the docs.
 // Use the function argument `personName` as search key.
+
+
+
 
 var findPeopleByName = function(personName, done) {
   
