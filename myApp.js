@@ -130,8 +130,6 @@ var createManyPeople = function(arrayOfPeople, done) {
 // It supports an extremely wide range of search options. Check it in the docs.
 // Use the function argument `personName` as search key.
 
-
-
 var findPeopleByName = function(personName, done) {
   Person.find({name: personName}, function (err, personFound) {
     if (err) return console.log(err);
@@ -165,9 +163,10 @@ var findOneByFood = function(food, done) {
 // Use the function argument 'personId' as search key.
 
 var findPersonById = function(personId, done) {
-  
-  done(null/*, data*/);
-  
+  Person.findById(personId, function (err, data) {
+    if (err) return console.log(err);
+    done(null, data);
+  });
 };
 
 /** # CR[U]D part III - UPDATE # 
@@ -197,9 +196,15 @@ var findPersonById = function(personId, done) {
 
 var findEditThenSave = function(personId, done) {
   var foodToAdd = 'hamburger';
-  
-  done(null/*, data*/);
-};
+  Person.findById(personId, function(err, p) {
+    if(err) return console.log(err)
+    p.favoriteFoods.push(foodToAdd)
+    p.save(function(err, data) {
+      if(err) return console.error(err)
+      done(null, data)
+    })
+  })
+}
 
 /** 9) New Update : Use `findOneAndUpdate()` */
 
